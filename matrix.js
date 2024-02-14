@@ -53,15 +53,38 @@ const showResult = (title, containerId, rows, cols, dataArray) => {
 const showResult2D = (title, containerId, dataArray) => {
 	// dataArray is a 2D array
 	// complete this function based on the showResult function
-    let length = dataArray.length;
-    let width = dataArray[0].length;
+    let cols = dataArray.length;
+    let rows = dataArray[0].length;
     let tempArray = [];
-    for (let i = 0; i < length; i++) {
-        for (let j = 0; j < width; j++) {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
             tempArray.push(dataArray[i][j]);
         }
     }
-    showResult(title, containerId, length, width, tempArray);
+    
+    let container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear previous content
+    let table = document.createElement('table');
+
+    for (let i = 0; i < cols; i++) {
+        let tr = document.createElement('tr');
+        for (let j = 0; j < rows; j++) {
+            let td = document.createElement('td');
+            let span = document.createElement('span');
+            // Calculate the index in the dataArray based on current row and column
+            let index = i * rows + j;
+            if (index < tempArray.length) {
+                span.innerHTML = tempArray[index];
+            }
+            td.appendChild(span);
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+
+    let caption = table.createCaption();
+    caption.textContent = title;
+    container.appendChild(table);
 }
 
 function performOperation(operation) {
@@ -73,23 +96,11 @@ function performOperation(operation) {
     // Just a test result
     // Call your matrix calculation functions here
     // For example: if (operation === 'add') { addMatrices(matrix1, matrix2); }
-    if (operation === 'add') {result = addMatrices(matrix1, matrix2);}
-    else if (operation === 'subtract') {result = subtractMatrices(matrix1, matrix2);}
-    else if (operation === 'multiply') {result = multiplyMatrices(matrix1, matrix2);}
+    if (operation === 'add') {addMatrices(matrix1, matrix2);}
+    else if (operation === 'subtract') {subtractMatrices(matrix1, matrix2);}
+    else if (operation === 'multiply') {multiplyMatrices(matrix1, matrix2);}
 	// prints suitable messages for impossible situation
-    if (operation === 'add' || operation === 'subtract'){
-        if (matrix1.length != matrix2.length || matrix1[0].length != matrix2[0].length) {
-            document.getElementById('matrix3').innerHTML = "Matrix sizes dont match!";
-            return;
-        }
-    }
-    else if (operation === 'multiply'){
-        if (matrix1[0].length != matrix2.length || matrix1.length != matrix2[0].length) {
-            document.getElementById('matrix3').innerHTML = "Matrix sizes dont work for multiplication!";
-            return;
-        }
-    }
-    showResult2D('The Result', 'matrix3', result); // use suitable function for printing results
+    // use suitable function for printing results
 }
 
 const getMatrixData1D = function (matrixId) {
@@ -127,12 +138,9 @@ const getMatrixData2D = function (matrixId) {
 // Add your matrix calculation functions here
 // The functions must check the posibility of calculation too.
 function addMatrices(matrix1, matrix2) { 
-    for (let i = 0; i < matrix1.length; i++) {
-        for (let j = 0; j < matrix1[i].length; j++) {
-            if (matrix1[i].length != matrix2[i].length) {
-                return;
-            }
-        }
+    if (matrix1.length != matrix2.length || matrix1[0].length != matrix2[0].length) {
+        document.getElementById('matrix3').innerHTML = "Matrix sizes dont work for addition!";
+        return;
     }
     let result = [];
     for (let i = 0; i < matrix1.length; i++) {
@@ -142,15 +150,13 @@ function addMatrices(matrix1, matrix2) {
         }
         result.push(row);
     }
-    return result;
+    showResult2D('The Result', 'matrix3', result);
+    return;
 }
 const subtractMatrices = function (matrix1, matrix2) { 
-    for (let i = 0; i < matrix1.length; i++) {
-        for (let j = 0; j < matrix1[i].length; j++) {
-            if (matrix1[i].length != matrix2[i].length) {
-                return;
-            }
-        }
+    if (matrix1.length != matrix2.length || matrix1[0].length != matrix2[0].length) {
+        document.getElementById('matrix3').innerHTML = "Matrix sizes dont work for addition!";
+        return;
     }
     let result = [];
     for (let i = 0; i < matrix1.length; i++) {
@@ -160,10 +166,12 @@ const subtractMatrices = function (matrix1, matrix2) {
         }
         result.push(row);
     }
-    return result;
+    showResult2D('The Result', 'matrix3', result);
+    return;
 };
 const multiplyMatrices = (matrix1, matrix2) => { 
     if (matrix1[0].length != matrix2.length || matrix1.length != matrix2[0].length) {
+        document.getElementById('matrix3').innerHTML = "Matrix sizes dont work for multiplication!";
         return;
     }
     let result = [];
@@ -178,5 +186,6 @@ const multiplyMatrices = (matrix1, matrix2) => {
         }
         result.push(row);
     }
-    return result;
+    showResult2D('The Result', 'matrix3', result);
+    return;
 };
