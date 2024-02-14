@@ -167,7 +167,7 @@ Description : DOM Elements.
 					<input type="email" id="email" name="email" /><br />
 					<label for="message">Message:</label>
 					<textarea id="message" name="message"></textarea><br />
-					<input type="button" value="Submit" />
+					<input type="button" value="Submit"/>
 				</form>
 			</section>
 			<article>
@@ -216,32 +216,49 @@ Description : DOM Elements.
 				document.querySelector("nav").style.backgroundColor = "light orange";
 
 				// Task 3: Hide the section titled 'What is full-stack?'
-				document.getElementByTagName("article").style.display = "none";
+				document.querySelector("article").style.display = "none";
 
 				// Task 4: Create a new <p> element and append it to the 'About Us' section
 				const p = document.createElement("p");
 				p.textContent = "This is a new paragraph";
-				document.querySelector("container").appendChild(p); 
-
+				p.style.color = "red";
+				document.querySelector("section").appendChild(p); 
+				
 				// Task 5: Add placeholders to input elements based on their corresponding label IDs
-
+				const labels = document.querySelectorAll("label");
+				labels.forEach((label) => {
+					const inputId = label.getAttribute("for");
+					const Element = document.getElementById(inputId);
+					Element.setAttribute("placeholder", Element.getAttribute("name"));
+				});
 
 				// Task 6: Set the src attribute of the image
-				document.getElement
-				
-			
-					
+				document.querySelector("img").src = "./images/example.svg";	
 
 				// Task 7: Add a new item in the navigation menu
-
+				const newNavItem = document.createElement('li');
+				const newNavLink = document.createElement('a');
+				newNavLink.textContent = "Blog";
+				newNavLink.setAttribute("href", "#");
+				newNavItem.appendChild(newNavLink);
+				const navigation = document.querySelector("nav ul");
+				navigation.appendChild(newNavItem);
 
 				// Task 8: Change the submit button text upon clicking and make it disabled
-
+				const submitButton = document.querySelector('input[type=button]');
+				submitButton.addEventListener("click", () => {
+					submitButton.value = "Submitted";
+					submitButton.disabled = true;
+				});
 
 				// Task 9: Change the text color of each item in the 'Related Links' to green
-
+				const links = document.querySelectorAll("aside ul li a").forEach((item) => {
+					item.style.color = "green";
+				});
 
 				// Task 10: Add a red solid border to the footer
+				document.querySelector("footer").style.border = "2px solid red";	
+
 			});
 		</script>
 	</body>
